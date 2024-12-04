@@ -5,8 +5,19 @@ const getAll = async (req: Request, res: Response) => {
   res.send("getAll user");
 };
 
-const getOne = async (req: Request, res: Response) => {
-  res.send("getOne user");
+const getOne = async (id: number) => {
+  const query = "SELECT * FROM users WHERE id = $1";
+  const values = [id];
+
+  try {
+    const result = await pool.query(query, values);
+    const user = result.rows[0];
+
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
 };
 
 const create = async (req: Request, res: Response) => {

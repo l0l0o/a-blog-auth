@@ -1,9 +1,7 @@
 import express from "express";
 import UserController from "./user/user.controller";
-import dotenv from "dotenv";
 import logger from "./middleware/logger.middleware";
-
-dotenv.config();
+import AuthController from "./auth/auth.controller";
 
 const app = express();
 const port = 8000;
@@ -16,6 +14,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.use("/auth", AuthController);
 app.use("/users", UserController);
 
 app.get("/private", (req, res) => {
