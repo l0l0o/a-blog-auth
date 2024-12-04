@@ -7,10 +7,10 @@ AuthController.post("/signin", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const userDTO = { username, password };
 
-  const result = await AuthService.signin(userDTO);
+  const access_token = await AuthService.signin(userDTO);
 
-  if (result) {
-    res.status(200).send({ message: "User authenticated" });
+  if (access_token) {
+    res.status(200).send({ access_token });
   } else {
     res.status(401).send({ message: "User not authenticated" });
   }
