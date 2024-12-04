@@ -1,21 +1,25 @@
 import { Request, Response } from "express";
 import pool from "../config/db.connect";
 import userService from "../user/user.service";
+import { IUserDTO } from "../user/user.types";
 
-const signin = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+const signin = async (userDTO: IUserDTO) => {
+  // Check if user exists
+  const user = await userService.getOneByUsername(userDTO.username);
 
-  // const user = await userService.getOne(req, res);
-  // console.log(user);
+  if (!user) {
+    return null;
+  }
 
-  res.send("signin");
+  if (user.password !== userDTO.password) {
+    return null;
+  }
+
+  return user;
 };
 
-const signup = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  console.log(username, password);
-
-  return userService.create(req, res);
+const signup = async (userDTO: IUserDTO) => {
+  return userService.create(userDTO);
 };
 
 export default {

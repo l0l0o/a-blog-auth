@@ -1,11 +1,26 @@
 import { Request, Response } from "express";
 import pool from "../config/db.connect";
+import { IUser, IUserDTO } from "./user.types";
 
 const getAll = async (req: Request, res: Response) => {
   res.send("getAll user");
 };
 
-const getOne = async (id: number) => {
+const getOneByUsername = async (username: string): Promise<IUser | null> => {
+  const query = "SELECT * FROM users WHERE username = $1";
+  const values = [username];
+
+  const result = await pool.query(query, values);
+  const user = result.rows[0];
+
+  if (!user) {
+    return null;
+  }
+
+  return user;
+};
+
+const getOneById = async (id: number): Promise<IUser | null> => {
   const query = "SELECT * FROM users WHERE id = $1";
   const values = [id];
 
@@ -20,19 +35,17 @@ const getOne = async (id: number) => {
   }
 };
 
-const create = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
+const create = async (userDTO: IUserDTO) => {
   const query = "INSERT INTO users (username, password) VALUES ($1, $2)";
-  const values = [username, password];
+  const values = [userDTO.username, userDTO.password];
 
   try {
     await pool.query(query, values);
 
-    res.status(201).json({ message: "User created successfully" });
+    return true;
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return false;
   }
 };
 
@@ -46,8 +59,9 @@ const remove = async (req: Request, res: Response) => {
 
 export default {
   getAll,
-  getOne,
+  getOneById,
   create,
   update,
   remove,
+  getOneByUsername,
 };
