@@ -30,16 +30,8 @@ app.use("/auth", AuthController);
 app.use("/users", UserController);
 
 app.get("/private", authMiddleware, (req, res) => {
-  console.log("private route req.user : ", req.user);
+  console.log("Get user with authMiddleware: ", req.user);
   res.send("Private route");
-});
-
-app.post("/travel", authMiddleware, (req, res) => {
-  // const createdTravel = {
-  //   name: req.body.name,
-  //   city: req.body.city,
-  //   userId: req.user.id,
-  // };
 });
 
 app.listen(port, () => {
