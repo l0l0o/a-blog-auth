@@ -30,7 +30,6 @@
 - id [Int PK]
 - username [varchar]
 - password [varchar]
-- email [varchar]
 - created_at [timestamp]
 
 ### Post
