@@ -4,8 +4,8 @@ import AuthService from "./auth.service";
 const AuthController = Router();
 
 AuthController.post("/signin", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDTO = { username, password };
+  const { username, password, email } = req.body;
+  const userDTO = { username, password, email };
 
   const access_token = await AuthService.signin(userDTO);
 
@@ -17,8 +17,8 @@ AuthController.post("/signin", async (req: Request, res: Response) => {
 });
 
 AuthController.post("/signup", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDTO = { username, password };
+  const { username, password, email } = req.body;
+  const userDTO = { username, password, email };
   const result = await AuthService.signup(userDTO);
 
   if (result) {

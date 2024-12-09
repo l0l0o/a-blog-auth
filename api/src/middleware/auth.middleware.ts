@@ -36,14 +36,18 @@ const authMiddleware = async (
 
       // vérifier si le token a expiré
       if (decoded?.exp < Date.now() / 1000) {
+        console.log("Token expiré");
         throw new Error("Token expired");
       }
 
       // Vérifier si l'utilisateur existe
       const user = await userService.getOneById(decoded.id);
       if (!user) {
+        console.log("User not found");
         throw new Error("User not found");
       }
+
+      (req as any).user = user;
 
       next();
     }

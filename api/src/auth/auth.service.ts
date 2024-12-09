@@ -11,10 +11,12 @@ const signin = async (userDTO: IUserDTO) => {
   const user = await userService.getOneByUsername(userDTO.username);
 
   if (!user) {
+    console.log("identifiant inconnu");
     return null;
   }
 
   if (user.password !== userDTO.password) {
+    console.log("Password inconnu");
     return null;
   }
 
