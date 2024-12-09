@@ -8,6 +8,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   console.log(
     `${methodColor}${req.method}${resetColor} ${urlColor}${req.url}${resetColor}`
   );
+
   next();
 };
 

@@ -18,6 +18,7 @@ AuthController.post("/signin", async (req: Request, res: Response) => {
 AuthController.post("/signup", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const userDTO = { username, password };
+
   const result = await AuthService.signup(userDTO);
 
   if (result) {

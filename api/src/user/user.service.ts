@@ -7,7 +7,7 @@ const getAll = async (req: Request, res: Response) => {
 };
 
 const getOneByUsername = async (username: string): Promise<IUser | null> => {
-  const query = "SELECT * FROM users WHERE username = $1";
+  const query = "SELECT * FROM public.user WHERE username = $1";
   const values = [username];
 
   const result = await pool.query(query, values);
@@ -21,7 +21,7 @@ const getOneByUsername = async (username: string): Promise<IUser | null> => {
 };
 
 const getOneById = async (id: number): Promise<IUser | null> => {
-  const query = "SELECT * FROM users WHERE id = $1";
+  const query = "SELECT * FROM public.user WHERE id = $1";
   const values = [id];
 
   try {
@@ -36,7 +36,7 @@ const getOneById = async (id: number): Promise<IUser | null> => {
 };
 
 const create = async (userDTO: IUserDTO) => {
-  const query = "INSERT INTO users (username, password) VALUES ($1, $2)";
+  const query = "INSERT INTO public.user (username, password) VALUES ($1, $2)";
   const values = [userDTO.username, userDTO.password];
 
   try {

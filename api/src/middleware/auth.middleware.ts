@@ -13,6 +13,8 @@ const authMiddleware = async (
   // Récupérer mon token
   const token = req.headers.authorization;
 
+  console.log(" authMiddleware token : ", token);
+
   // Vérifier si le token est valide
   if (!token) {
     throw new Error("Token not found");
@@ -41,9 +43,14 @@ const authMiddleware = async (
 
       // Vérifier si l'utilisateur existe
       const user = await userService.getOneById(decoded.id);
+
+      console.log("authMiddleware user : ", user);
+
       if (!user) {
         throw new Error("User not found");
       }
+
+      (req as any).user = user;
 
       next();
     }
