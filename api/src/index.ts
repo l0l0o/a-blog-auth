@@ -3,11 +3,19 @@ import UserController from "./user/user.controller";
 import logger from "./middleware/logger.middleware";
 import AuthController from "./auth/auth.controller";
 import authMiddleware from "./middleware/auth.middleware";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 app.use(logger);
 
