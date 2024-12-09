@@ -19,6 +19,7 @@ declare global {
 }
 
 app.use(express.json());
+app.use(cors());
 
 app.use(
   cors({
@@ -39,6 +40,14 @@ app.use("/posts", PostController);
 
 app.get("/private", (req, res) => {
   res.send("Private route");
+});
+
+app.post("/travel", authMiddleware, (req, res) => {
+  // const createdTravel = {
+  //   name: req.body.name,
+  //   city: req.body.city,
+  //   userId: req.user.id,
+  // };
 });
 
 app.listen(port, () => {
