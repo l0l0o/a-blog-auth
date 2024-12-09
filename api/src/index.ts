@@ -42,14 +42,6 @@ app.get("/private", (req, res) => {
   res.send("Private route");
 });
 
-app.post("/travel", authMiddleware, (req, res) => {
-  // const createdTravel = {
-  //   name: req.body.name,
-  //   city: req.body.city,
-  //   userId: req.user.id,
-  // };
-});
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
