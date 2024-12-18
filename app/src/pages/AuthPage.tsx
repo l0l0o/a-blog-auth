@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import useCustomNavigate from "../hooks/useCustomNavigate";
 import useJwtToken from "../hooks/useJwtToken";
+import useCredentials from "../hooks/useCredentials";
 
 const AuthPage = () => {
   const [credentials, setCredentials] = useState<IUserDTO>({
@@ -13,17 +14,19 @@ const AuthPage = () => {
     email: ""
   });
 
-  const { token, saveToken, removeToken } = useJwtToken();
+  const { saveToken } = useJwtToken();
 
   const navigate = useCustomNavigate();
 
-  const [isOnConnexion, setIsOnConnexion] = useState(true);
+  const {updateCredentials} = useCredentials();
 
-  const toggleIsOnConnexion = () => {
-    if (isOnConnexion) {
-      setIsOnConnexion(false)
+  const [isOnSignIn, setIsOnSignIn] = useState(true);
+
+  const toggleIsOnSignIn = () => {
+    if (isOnSignIn) {
+      setIsOnSignIn(false);
     } else {
-      setIsOnConnexion(true);
+      setIsOnSignIn(true);
     }
   }
 
@@ -32,14 +35,14 @@ const AuthPage = () => {
     try {
       const response = await SignIn(credentials);
       const newToken = response.access_token;
+      updateCredentials(newToken);
       saveToken(newToken);
-      navigate("/posts");
+      // navigate("/posts");
     }
     catch (error) {
-      console.log("dommage", error)
+      console.log("Erreur: ", error);
     }
   }
-
     const onSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("submit")
@@ -64,14 +67,14 @@ const AuthPage = () => {
 
   return (
     <>
-      <h1>{isOnConnexion? "Connexion" : "Inscription"}</h1>
+      <h1>{isOnSignIn? "Connexion" : "Inscription"}</h1>
       <form>
         <Input onChange={handleChange} value={credentials.username} name="username" type="text" placeholder="Username"/>
         <Input onChange={handleChange} value={credentials.email} name="email" type="email" placeholder="Email" />
         <Input onChange={handleChange} value={credentials.password} name="password" type="password" placeholder="Password" />
-        <Button type="submit" onClick={isOnConnexion? onSignInSubmit : onSignUpSubmit} text={isOnConnexion? "Se connecter" : "S'inscrire"} />
+        <Button type="submit" onClick={isOnSignIn? onSignInSubmit : onSignUpSubmit} text={isOnSignIn? "Se connecter" : "S'inscrire"} />
       </form>
-      <button onClick={toggleIsOnConnexion}>{isOnConnexion? "Inscription" : "Connexion"}</button>
+      <button onClick={toggleIsOnSignIn}>{isOnSignIn? "Inscription" : "Connexion"}</button>
     </>
   )
 }

@@ -5,6 +5,11 @@ export interface IUser {
   email: string;
 }
 
+export interface IUserCredentials {
+  id: number;
+  username: string;
+}
+
 export interface IUserDTO {
   username: string;
   password: string;

@@ -28,6 +28,7 @@ const signin = async (userDTO: IUserDTO) => {
     }
   );
 
+  console.log("🚀 ~ signin ~ user:", user);
   return access_token;
 };
 

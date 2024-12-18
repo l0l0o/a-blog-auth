@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <div>
             <h1>Home</h1>
-            <p>ton token : {token }</p>
+            <p>ton token : {token}</p>
         </div>
     );
 }
