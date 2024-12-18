@@ -21,11 +21,11 @@ AuthController.post("/signup", async (req: Request, res: Response) => {
   const userDTO = { username, password, email };
   const result = await AuthService.signup(userDTO);
 
-  if (result) {
-    res.status(201).send({ message: "User created" });
-  } else {
+  if (!result) {
     res.status(400).send({ message: "User not created" });
   }
+  console.log("new user: ", userDTO);
+  res.status(201).send({ message: "User created" });
 });
 
 export default AuthController;
