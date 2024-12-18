@@ -1,4 +1,7 @@
 import { Pool } from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Configuration de la connexion
 const pool = new Pool({

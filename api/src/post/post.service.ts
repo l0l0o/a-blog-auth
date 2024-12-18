@@ -1,69 +1,55 @@
 import { Request, Response } from "express";
 import pool from "../config/db.connect";
-import { IUser, IUserDTO } from "./user.types";
+import { IPost, IPostDTO } from "./post.types";
 
 const getAll = async () => {
-  const query = "SELECT * FROM public.user";
+  const query = "SELECT * FROM public.post ORDER BY id ASC";
   const result = await pool.query(query);
 
-  const users = result.rows;
-  console.log("🚀 ~ getAll ~ users:", users);
+  const posts = result.rows;
+  console.log("🚀 ~ getAll ~ posts:", posts);
 
-  if (!users) {
+  if (!posts) {
     return null;
   }
 
-  return users;
+  return posts;
 };
 
-const getOneByUsername = async (username: string): Promise<IUser | null> => {
-  const query = "SELECT * FROM public.user WHERE username = $1";
-  const values = [username];
-
-  const result = await pool.query(query, values);
-  const user = result.rows[0];
-
-  if (!user) {
-    return null;
-  }
-
-  return user;
-};
-
-const getOneById = async (id: number): Promise<IUser | null> => {
-  const query = "SELECT * FROM public.user WHERE id = $1";
+const getOneById = async (id: number): Promise<IPost | null> => {
+  const query = "SELECT * FROM public.post WHERE id = $1";
   const values = [id];
 
   try {
     const result = await pool.query(query, values);
-    const user = result.rows[0];
+    const post = result.rows[0];
 
-    return user;
+    return post;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error("Error fetching post:", error);
     return null;
   }
 };
 
-const create = async (userDTO: IUserDTO) => {
+const create = async (postDTO: IPostDTO, user_id: number | undefined) => {
   const query =
-    "INSERT INTO public.user (username, password, email) VALUES ($1, $2, $3)";
-  const values = [userDTO.username, userDTO.password, userDTO.email];
+    "INSERT INTO public.post (user_id, title, content, image_path) VALUES ($1, $2, $3, $4)";
+  const values = [user_id, postDTO.title, postDTO.content, postDTO.image_path];
 
   try {
     await pool.query(query, values);
     return true;
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating post:", error);
     return false;
   }
 };
 
 const update = async (
   id: number,
-  updatedFields: IUserDTO
+  updatedFields: IPostDTO
 ): Promise<boolean> => {
-  const query = "SELECT * FROM public.user WHERE id = $1";
+  const query = "SELECT * FROM public.post WHERE id = $1";
   const values = [id];
 
   try {
@@ -76,19 +62,19 @@ const update = async (
     }
 
     if (Array.isArray(results.rows) && results.rows.length === 1) {
-      const currentUser = results.rows[0];
-      console.log("🚀 ~ currentUser:", currentUser);
+      const currentPost = results.rows[0];
+      console.log("🚀 ~ currentPost:", currentPost);
 
-      const newUser = {
-        ...currentUser,
+      const newPost = {
+        ...currentPost,
         ...updatedFields,
       };
 
-      console.log("newUser: ", newUser);
+      console.log("newPost: ", newPost);
 
       const sqlUpdate =
-        "UPDATE public.user SET username = $1, password = $2, email = $3 WHERE id = $4";
-      const values = [newUser.username, newUser.password, newUser.email, id];
+        "UPDATE public.post SET title = $1, content = $2, image_path = $3 WHERE id = $4";
+      const values = [newPost.title, newPost.content, newPost.image_path, id];
 
       await pool.query(sqlUpdate, values);
       console.log("Post mis à jour avec succès");
@@ -103,7 +89,7 @@ const update = async (
 };
 
 const remove = async (id: number) => {
-  const query = "DELETE FROM public.user WHERE id = $1";
+  const query = "DELETE FROM public.post WHERE id = $1";
   const values = [id];
 
   try {
@@ -123,5 +109,4 @@ export default {
   create,
   update,
   remove,
-  getOneByUsername,
 };
