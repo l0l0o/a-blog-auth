@@ -5,7 +5,7 @@ interface CustomJwtPayload extends JwtPayload {
   username: string;
 }
 
-const decodeJwtToken = (token: string): CustomJwtPayload | null => {
+const checkJwtToken = (token: string): CustomJwtPayload | null => {
   try {
     const decoded = jwtDecode<CustomJwtPayload>(token); // Utiliser le type personnalisé
     console.log("Contenu du JWT :", decoded);
@@ -16,4 +16,4 @@ const decodeJwtToken = (token: string): CustomJwtPayload | null => {
   }
 };
 
-export default decodeJwtToken;
+export default checkJwtToken;

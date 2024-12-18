@@ -6,6 +6,8 @@ import Button from "../components/Button";
 import useCustomNavigate from "../hooks/useCustomNavigate";
 import useJwtToken from "../hooks/useJwtToken";
 import useCredentials from "../hooks/useCredentials";
+import checkJwtToken from "../functions/checkToken";
+import toast from "../functions/toast";
 
 const AuthPage = () => {
   const [credentials, setCredentials] = useState<IUserDTO>({
@@ -35,24 +37,33 @@ const AuthPage = () => {
     try {
       const response = await SignIn(credentials);
       const newToken = response.access_token;
-      updateCredentials(newToken);
+      const decodedToken = checkJwtToken(newToken);
+
+      if (decodedToken) updateCredentials(decodedToken.username, decodedToken?.id);
       saveToken(newToken);
-      // navigate("/posts");
+      navigate("/posts");
     }
     catch (error) {
       console.log("Erreur: ", error);
     }
   }
-    const onSignUpSubmit = async (e: React.FormEvent) => {
+
+  const onSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("submit")
     try {
-      const response = await SignUp(credentials);
-      console.log("🚀 ~ onSignUpSubmit ~ response:", response)
-      return await response.json();
+      await SignUp(credentials);
+      toast("Compte créé avec succès", "success");
+
+      setCredentials({
+        username: "",
+        password: "",
+        email: ""
+      });
     }
     catch (error) {
-      console.log("dommage", error)
+      console.log("Erreur", error)
+      toast("Un problème a eu lieu lors de la création du compte", "danger");
     }
   }
 
