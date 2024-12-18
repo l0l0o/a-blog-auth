@@ -1,5 +1,5 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import PostList from "./pages/PostList";
+import PostList from "./pages/Home";
 import AuthPage from "./pages/AuthPage";
 
 export default function App() {
