@@ -1,5 +1,5 @@
 type ButtonProps = {
-    type: "submit"
+    type?: "submit"
     onClick: React.MouseEventHandler<HTMLButtonElement>
     text: string
 }

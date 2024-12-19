@@ -30,7 +30,17 @@ const useJwtToken = (
     setToken(null);
   };
 
-  return { token, saveToken, removeToken };
+  const isTokenValid = (tokenExpiration: number | undefined) => {
+    // vérifier si le token a expiré
+    if (tokenExpiration < Date.now() / 1000) {
+      console.log("Token expiré");
+      throw new Error("Token expired");
+    }
+
+    return true;
+  };
+
+  return { token, saveToken, removeToken, isTokenValid };
 };
 
 export default useJwtToken;

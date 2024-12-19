@@ -16,7 +16,7 @@ const AuthPage = () => {
     email: ""
   });
 
-  const { saveToken } = useJwtToken();
+  const { saveToken, isTokenValid } = useJwtToken();
 
   const navigate = useCustomNavigate();
 
@@ -30,6 +30,11 @@ const AuthPage = () => {
     } else {
       setIsOnSignIn(true);
     }
+      setCredentials({
+        username: "",
+        password: "",
+        email: ""
+      });
   }
 
   const onSignInSubmit = async (e: React.FormEvent) => {
@@ -39,10 +44,16 @@ const AuthPage = () => {
       const newToken = response.access_token;
       const decodedToken = checkJwtToken(newToken);
 
-      if (decodedToken) updateCredentials(decodedToken.username, decodedToken?.id);
-      saveToken(newToken);
-      navigate("/posts");
-    }
+
+      if (decodedToken && isTokenValid(decodedToken.exp)) {
+        updateCredentials(decodedToken.username, decodedToken?.id);
+        saveToken(newToken);
+        toast(`Bienvenue ${credentials.username}`, "success");
+        navigate("/posts");
+      } else {      
+          toast("Un problème a eu lieu lors de la connexion", "danger");
+        }
+      }
     catch (error) {
       console.log("Erreur: ", error);
       toast("Un problème a eu lieu lors de la connexion", "danger");
@@ -81,9 +92,9 @@ const AuthPage = () => {
     <>
       <h1>{isOnSignIn? "Connexion" : "Inscription"}</h1>
       <form>
-        <Input onChange={handleChange} value={credentials.username} name="username" type="text" placeholder="Username"/>
-        <Input onChange={handleChange} value={credentials.email} name="email" type="email" placeholder="Email" />
-        <Input onChange={handleChange} value={credentials.password} name="password" type="password" placeholder="Password" />
+        <Input required={true} onChange={handleChange} value={credentials.username} name="username" type="text" placeholder="Username"/>
+        <Input required={true} onChange={handleChange} value={credentials.email} name="email" type="email" placeholder="Email" />
+        <Input required={true} onChange={handleChange} value={credentials.password} name="password" type="password" placeholder="Password" />
         <Button type="submit" onClick={isOnSignIn? onSignInSubmit : onSignUpSubmit} text={isOnSignIn? "Se connecter" : "S'inscrire"} />
       </form>
       <button onClick={toggleIsOnSignIn}>{isOnSignIn? "Inscription" : "Connexion"}</button>

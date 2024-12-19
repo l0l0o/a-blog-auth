@@ -16,6 +16,20 @@ const getAll = async () => {
   return posts;
 };
 
+const getAllByUserId = async (id: number) => {
+  const query = `SELECT * FROM public.post WHERE user_id =${id} ORDER BY id ASC`;
+  const result = await pool.query(query);
+
+  const posts = result.rows;
+  console.log("🚀 ~ getAll ~ posts:", posts);
+
+  if (!posts) {
+    return null;
+  }
+
+  return posts;
+};
+
 const getOneById = async (id: number): Promise<IPost | null> => {
   const query = "SELECT * FROM public.post WHERE id = $1";
   const values = [id];
@@ -105,6 +119,7 @@ const remove = async (id: number) => {
 
 export default {
   getAll,
+  getAllByUserId,
   getOneById,
   create,
   update,

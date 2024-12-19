@@ -20,6 +20,16 @@ PostController.get("/:id", async (req: Request, res: Response) => {
   res.send(post);
 });
 
+PostController.get("/user/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const posts = await postService.getAllByUserId(+id);
+  if (!posts) {
+    res.status(404).send("posts not found");
+  }
+
+  res.send(posts);
+});
+
 PostController.post(
   "/",
   authMiddleware,

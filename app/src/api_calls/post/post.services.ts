@@ -4,12 +4,20 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const getAllPosts = async () => {
   const response = await fetch(`${API_URL}/posts`);
-  return response;
+  const data = response.json();
+  return data;
 };
 
-export const getOneByIdPost = async (id: number) => {
+export const getOneById = async (id: number | undefined) => {
   const response = await fetch(`${API_URL}/posts/${id}`);
-  return response;
+  const data = response.json();
+  return data;
+};
+
+export const getAllByUserId = async (id: number) => {
+  const response = await fetch(`${API_URL}/posts/${id}/user`);
+  const data = response.json();
+  return data;
 };
 
 export const createPost = async (post: IPostDTO, token: string) => {
