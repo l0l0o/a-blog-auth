@@ -45,6 +45,7 @@ const AuthPage = () => {
     }
     catch (error) {
       console.log("Erreur: ", error);
+      toast("Un problème a eu lieu lors de la connexion", "danger");
     }
   }
 
